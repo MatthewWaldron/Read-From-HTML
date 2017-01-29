@@ -12,7 +12,10 @@ public class ReadStatPriority {
 	public static void main(String[] args) throws IOException 
 	{
 		Scanner read = new Scanner(System.in);
-
+		boolean runAgain = true;
+		while(runAgain == true)
+		{
+		runAgain = false;
 		System.out.println("Please enter a class to recieve stat priority:");
 		String wowClass = read.nextLine();
 		System.out.println("Enter the specialization:");
@@ -29,7 +32,8 @@ public class ReadStatPriority {
 				htmlDoc = Jsoup.connect(url).get();
 			} catch (org.jsoup.HttpStatusException e)
 			{
-				System.err.println("Unable to find http address: " + e.getMessage());
+				System.out.println("Unable to find http address: " + e.getMessage());
+				runAgain = true;
 			}
 			if(htmlDoc != null)
 			{
@@ -49,6 +53,7 @@ public class ReadStatPriority {
 		else
 		{
 			System.out.println("Cannot find class/spec combination, please try again.");
+		}
 		}
 	}
 	
