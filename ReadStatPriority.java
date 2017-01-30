@@ -35,6 +35,9 @@ public class ReadStatPriority {
 			} catch (org.jsoup.HttpStatusException e) {
 				System.out.println("Unable to find http address: " + e.getMessage());
 				runAgain = true;
+			} catch (java.io.EOFException f) {
+				System.out.println("Unable to complete the request at this time: " + f.getMessage());
+				runAgain = true;
 			}
 			
 			if(htmlDoc != null)
