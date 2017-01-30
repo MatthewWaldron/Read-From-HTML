@@ -100,7 +100,7 @@ public class ReadStatPriority {
 		} 
 		else if (Arrays.asList(healers).contains(wowSpec))
 		{
-			return "healer";
+			return "healing";
 		}
 		else if (Arrays.asList(tanks).contains(wowSpec))
 		{
