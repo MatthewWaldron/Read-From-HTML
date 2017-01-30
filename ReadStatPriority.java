@@ -18,15 +18,15 @@ public class ReadStatPriority {
 		{
 		runAgain = false;
 		System.out.println("Please enter a class to recieve stat priority:");
-		String wowClass = read.nextLine();
+		String wowClass = read.nextLine().toLowerCase();
 		System.out.println("Enter the specialization:");
-		String wowSpec = read.nextLine();
+		String wowSpec = read.nextLine().toLowerCase();
 		String wowRole = checkRole(wowClass, wowSpec);
 	
 		
 		if(wowRole != null)
 		{
-			String inputUrl = wowSpec.toLowerCase() + "-" + wowClass.toLowerCase().replaceAll(" ", "-") + "-pve-" + wowRole.toLowerCase(); 
+			String inputUrl = wowSpec + "-" + wowClass.replaceAll(" ", "-") + "-pve-" + wowRole; 
 			String url = "http://www.icy-veins.com/wow/" + inputUrl + "-stat-priority";
 			Document htmlDoc = null;
 			
