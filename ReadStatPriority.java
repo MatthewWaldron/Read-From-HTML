@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -78,6 +77,11 @@ public class ReadStatPriority {
 			{
 				System.out.println("Cannot find class/spec combination, please try again.");
 			}
+		}
+		else
+		{
+			System.out.println("Unable to find class/spec, please try again.");
+			runAgain = true;
 		}
 		}
 		
