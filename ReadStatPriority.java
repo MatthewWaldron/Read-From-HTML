@@ -1,9 +1,11 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ReadStatPriority {
@@ -28,33 +30,57 @@ public class ReadStatPriority {
 			String inputUrl = wowSpec.toLowerCase() + "-" + wowClass.toLowerCase().replaceAll(" ", "-") + "-pve-" + wowRole.toLowerCase(); 
 			String url = "http://www.icy-veins.com/wow/" + inputUrl + "-stat-priority";
 			Document htmlDoc = null;
+			
 			try{
 				htmlDoc = Jsoup.connect(url).get();
-			} catch (org.jsoup.HttpStatusException e)
-			{
+			} catch (org.jsoup.HttpStatusException e) {
 				System.out.println("Unable to find http address: " + e.getMessage());
 				runAgain = true;
 			}
+			
 			if(htmlDoc != null)
 			{
-				//Stat priority and weight are organized using the ol tag
+				//Stat priority and weight are organized using the <ol> tag
+				//Headers such as "Stat Weights" are organized using the <h2> and <h3> tags
 				Elements priority = htmlDoc.select("ol");
+
 				
-				String scale = priority.text();
-				String[] result = scale.split("; ");
-				System.out.println();
-				
-				for(String s : result)
+				//Each <ol> has a header before it, but the first header may not have an <ol> after it
+				for(Element l : priority)
 				{
-					System.out.println(s);
+					//This will check the previous elements for each ol and find the respective header
+					//Have to use a loop to find the corresponding header since some ol have paragraphs in between
+					Element prev = l.previousElementSibling();
+					while(prev != null && (!prev.tag().toString().equals("h2") && !prev.tag().toString().equals("h3")))
+					{
+						prev = prev.previousElementSibling();
+					}
+					
+					//Will output the header and format it to remove the "1. " or "1.2. " without removing space between words
+					if(prev != null)
+						System.out.println(prev.text().replaceAll("([0-9])|(\\.)|(?<=[^\\w]) ", "") + ":");
+					
+					//Change spaces, periods, etc to ";" so that it can be split using a semicolon
+					String scale = l.text();
+					scale = scale.replaceAll("\\. ", ";");
+					scale = scale.replaceAll("; ", ";");
+					scale = scale.replaceAll("(?<=[0-9]) ",";");
+					String[] result = scale.split(";");
+					
+					for(String s : result)
+					{
+						System.out.println("  " + s.replaceAll("\\.", ""));
+					}
+					System.out.println();
 				}
 			}
+			else
+			{
+				System.out.println("Cannot find class/spec combination, please try again.");
+			}
 		}
-		else
-		{
-			System.out.println("Cannot find class/spec combination, please try again.");
 		}
-		}
+		
 	}
 	
 	private static String checkRole(String wowClass, String wowSpec)
